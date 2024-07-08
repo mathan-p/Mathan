@@ -1,4 +1,30 @@
-Git :- githhub(central),git(local)
+•
+What is Git?
+•
+How to Install Git on Windows?
+•
+What is GitHub?
+•
+Git commands.
+•
+Git vs. GitHub.
+•
+What is GitLab?
+•
+Git Clone Commands.
+•
+Git Push Commands.
+•
+Git Pull Commands.
+•
+Git History
+•
+Branching and Merging
+•
+Resolve Merge Conflicts in Git
+
+
+git :- githhub(central),git(local)
 ---------------------------------------------------------------------------
 Git is distributed reposistory.
 -----------------------------------------
