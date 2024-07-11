@@ -1,0 +1,56 @@
+CREATE DATABASE MATHAN_DB;
+USE MATHAN_DB;
+
+CREATE TABLE EMP(
+ID INT PRIMARY KEY AUTO_INCREMENT,
+LASTNAME VARCHAR(20) NOT NULL,
+FIRSTNAME VARCHAR(20),
+AGE INT
+);
+
+INSERT INTO EMP (LASTNAME,FIRSTNAME,AGE) VALUES ('MARSHAL','X',20);
+
+SELECT * FROM EMP1;
+
+CREATE INDEX MATHANINDEX ON EMP1 (LASTNAME,FIRSTNAME,AGE);
+
+INSERT INTO EMP (LASTNAME,FIRSTNAME,AGE)VALUES ('Q','SHREYA',15);
+
+DROP TABLE  EMP1;
+
+ALTER TABLE EMP ADD constraint unique (LASTNAME);
+SELECT * FROM EMP;
+
+
+SELECT count(FIRSTNAME) FROM EMP;
+
+SELECT distinct LASTNAME FROM EMP;
+SELECT * FROM EMP WHERE NOT LASTNAME='x' AND NOT AGE=18;
+
+CREATE TABLE BANK (ACC_NO INT PRIMARY KEY,NAME  VARCHAR(10) NOT NULL , ADDRESS VARCHAR(10) unique,BRANCH VARCHAR(12));
+
+INSERT INTO BANK VALUES (103,'SURYA','ERODE','ICCI');
+
+SELECT * FROM BANK;
+
+CREATE TABLE CUSTOMER(
+ACC_NO INT ,
+BALANCE VARCHAR(10),
+BRANCH VARCHAR(10)  ,
+constraint foreign KEY (ACC_NO) REFERENCES BANK (ACC_NO)
+);
+
+ALTER TABLE CUSTOMER ADD constraint unique(BRANCH);
+
+INSERT INTO CUSTOMER VALUES(104,5000,'IOB');
+
+SELECT  * FROM BANK
+LIMIT 2 ;
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+
+
+
+
+
