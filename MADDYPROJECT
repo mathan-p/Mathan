@@ -1,0 +1,114 @@
+
+NAME                     :MATHAN P
+EMPLOYEE ID   :2604070
+
+1.	CREATING MATHAN BOOK CATALOG SYSTEM SCHEMA:
+
+create database Mathan_Book_Catalog_System;
+use Mathan_Book_Catalog_System ;
+
+2.	CREATING TABLES FOR CATEGORIES:
+
+create table Mathan_Categories(
+Category_id int primary key,
+Category_Name varchar(50) unique not null
+);
+
+INSERTING DATA IN CATEGORIES TABLE :
+insert into Mathan_Categories values(1,'Alphabets');
+insert into Mathan_Categories values(2,'games');
+insert into Mathan_Categories values(3,'food');
+insert into Mathan_Categories values(4,'anime');
+insert into Mathan_Categories values(5,'webseries');
+
+
+
+3.	CREATING TABLES FOR PUBLISHER  :
+create table Mathan_Publishers(
+Publisher_id int primary key,
+Publisher_Name varchar(20) not null
+);
+INSERTING DATA IN PUBLISHER  TABLE :
+insert into Mathan_Publishers values(1,'Mphasis');
+insert into Mathan_Publishers values(2,'Dhoni');
+insert into Mathan_Publishers values(3,'udupi');
+insert into Mathan_Publishers values(4,'akatsukhi');
+insert into Mathan_Publishers values(5,'thomas');
+
+4.	 CREATING TABLES FOR BOOKS  :
+create table MathanBooks (
+book_id int primary key,
+Title varchar(50) not null,
+ISBN varchar(20) unique not null,
+Publication_Year int not null,
+Publisher_id int,
+Category_id int,
+Author_Name varchar(20) check(Author_Name is not null) 
+);
+
+
+
+alter table MathanBooks add constraint foreign key (Publisher_id) references Mathan_Publishers (Publisher_id) on delete cascade;
+alter table MathanBooks add constraint foreign key (Category_id) references Mathan_Categories (Category_id) on delete cascade;
+
+INSERTING DATA IN BOOKS TABLE :
+
+insert into MathanBooks values(1,'abc','ISBN123456',2001,1,1,'saru');
+insert into MathanBooks values(2,'Cricket','ISBN1256',2002,2,2,'sachin');
+insert into MathanBooks values(3,'NonVeg','ISBN7894',2003,3,3,'Subbu');
+insert into MathanBooks values(5,'ThomasShelby','ISBN78454',2005,5,5,'Steven');
+insert into MathanBooks values(4,'Naruto','ISBN78684',2004,4,4,'MasahiKhisimoto');
+
+5.CREATING TABLES FOR USERS  :
+
+create table Mathan_Users (
+User_id int primary key,
+Username varchar(20) not null,
+Email varchar(20) unique not null,
+Phone_Number varchar(25) unique not null
+);
+
+
+INSERTING DATA IN USERS TABLE :
+
+insert into Mathan_Users values(1,'Mathan','mathan@gmail.com',9514487354);
+insert into Mathan_Users values(2,'marshal','marshal@gmail.com',123456789);
+insert into Mathan_Users values(3,'Santhosh','Santhosh@gmail.com',987456789);
+insert into Mathan_Users values(4,'Vijay','Vijay@gmail.com',967891324);
+insert into Mathan_Users values(5,'Naveen','Naveen@gmail.com',987652134);
+
+6.CREATING TABLES FOR BORROWINGS  :
+
+create table Mathan_Borrowings(
+Borrower_id int primary key ,
+User_id int,
+Book_id int,
+Borrow_date date not null ,
+Return_date date not null,
+constraint  foreign key (User_id) references Mathan_Users (User_id) on delete cascade,
+constraint  foreign key (Book_id) references MathanBooks (book_id) on delete cascade
+);
+
+
+
+INSERTING DATA IN BOOKS BORROWINGS :
+insert into Mathan_Borrowings values(1,1,1,'2024-01-10','2024-01-12');
+insert into Mathan_Borrowings values(2,2,2,'2024-01-11','2024-01-13');
+insert into Mathan_Borrowings values(3,3,3,'2024-01-12','2024-01-14');
+insert into Mathan_Borrowings values(4,4,4,'2024-01-13','2024-01-15');
+insert into Mathan_Borrowings values(5,5,5,'2024-01-14','2024-01-16');
+
+3.  FETCHING ALL THE RECORDS:
+
+select MathanBooks.book_id ,MathanBooks.Title, MathanBooks.ISBN,MathanBooks.Publication_Year ,MathanBooks.Author_Name,
+Mathan_Categories.Category_Name,
+Mathan_Publishers.Publisher_Name,
+Mathan_Users.Username,Mathan_Users.Email,Mathan_Users.Phone_Number,
+Mathan_Borrowings.Borrow_date,Mathan_Borrowings.Return_date
+
+from Mathan_Borrowings  
+
+join Mathan_Users  on  Mathan_Users.User_id=Mathan_Borrowings.User_id
+join MathanBooks  on MathanBooks.book_id=Mathan_Borrowings.Book_id
+join Mathan_Publishers on Mathan_Publishers.Publisher_id=MathanBooks.Book_id
+join Mathan_Categories on Mathan_Categories.Category_id=MathanBooks.Category_id;
