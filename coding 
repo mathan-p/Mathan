@@ -1,0 +1,1084 @@
+[7/16, 7:38 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class MonthName {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a number between 1 and 12: ");
+        
+        if (scanner.hasNextInt()) {
+            int monthNumber = scanner.nextInt();
+            System.out.println(getMonthName(monthNumber));
+        } else {
+            System.out.println("Invalid Input");
+        }
+
+        scanner.close();
+    }
+
+    public static String getMonthName(int monthNumber) {
+        String[] months = {
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        };
+
+        if (monthNumber >= 1 && monthNumber <= 12) {
+            return months[monthNumber - 1];
+        } else {
+            return "Invalid Input";
+        }
+    }
+}
+[7/16, 7:38 PM] Karthi - MPHASIS Karur: public class ComplexNumber {
+    private double real;
+    private double imaginary;
+
+    
+    public ComplexNumber(double real, double imaginary) {
+        this.real = real;
+        this.imaginary = imaginary;
+    }
+
+ 
+    public ComplexNumber add(ComplexNumber other) {
+        double newReal = this.real + other.real;
+        double newImaginary = this.imaginary + other.imaginary;
+        return new ComplexNumber(newReal, newImaginary);
+    }
+
+    @Override
+    public String toString() {
+        return "(" + real + " + " + imaginary + "i)";
+    }
+
+    public static void main(String[] args) {
+        ComplexNumber complex1 = new ComplexNumber(2, 3);
+        ComplexNumber complex2 = new ComplexNumber(4, -5);
+
+        ComplexNumber sum = complex1.add(complex2);
+
+        System.out.println("The sum of " + complex1 + " and " + complex2 + " is: " + sum);
+    }
+}
+[7/16, 7:38 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class MonthName {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a number between 1 and 12: ");
+        
+        if (scanner.hasNextInt()) {
+            int monthNumber = scanner.nextInt();
+            System.out.println(getMonthName(monthNumber));
+        } else {
+            System.out.println("Invalid Input");
+        }
+
+        scanner.close();
+    }
+
+    public static String getMonthName(int monthNumber) {
+        String[] months = {
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        };
+
+        if (monthNumber >= 1 && monthNumber <= 12) {
+            return months[monthNumber - 1];
+        } else {
+            return "Invalid Input";
+        }
+    }
+}
+[7/16, 7:38 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class SimpleCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a simple arithmetic operation (e.g., 83+): ");
+        String input = scanner.nextLine();
+        
+        try {
+            
+            if (input.contains("+")) {
+                
+                String[] parts = input.split("\\+");
+                if (parts.length == 2) {
+                   
+                    int num1 = Integer.parseInt(parts[0]);
+                    int num2 = Integer.parseInt(parts[1]);
+                 
+                    int result = num1 + num2;
+                    System.out.println("Output: " + result);
+                } else {
+                    System.out.println("Invalid Input");
+                }
+            } else {
+                System.out.println("Invalid Input");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid Input");
+        }
+
+        scanner.close();
+    }
+}
+[7/16, 7:38 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+class ComplexNumber {
+    double real;
+    double imaginary;
+
+    public ComplexNumber(double real, double imaginary) {
+        this.real = real;
+        this.imaginary = imaginary;
+    }
+
+    public ComplexNumber add(ComplexNumber other) {
+        double newReal = this.real + other.real;
+        double newImaginary = this.imaginary + other.imaginary;
+        return new ComplexNumber(newReal, newImaginary);
+    }
+
+    @Override
+    public String toString() {
+        return real + " + " + imaginary + "i";
+    }
+}
+
+public class ComplexNumberAddition {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        
+        System.out.print("Enter the real part of the first complex number: ");
+        double real1 = scanner.nextDouble();
+        System.out.print("Enter the imaginary part of the first complex number: ");
+        double imaginary1 = scanner.nextDouble();
+
+        ComplexNumber num1 = new ComplexNumber(real1, imaginary1);
+
+        
+        System.out.print("Enter the real part of the second complex number: ");
+        double real2 = scanner.nextDouble();
+        System.out.print("Enter the imaginary part of the second complex number: ");
+        double imaginary2 = scanner.nextDouble();
+
+        ComplexNumber num2 = new ComplexNumber(real2, imaginary2);
+
+       
+        ComplexNumber result = num1.add(num2);
+
+        
+        System.out.println("The sum of the two complex numbers is: " + result);
+
+        scanner.close();
+    }
+}
+[7/16, 7:38 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class StudentGrade {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the percentage obtained by the student: ");
+        
+        try {
+            double percentage = scanner.nextDouble();
+            String grade = getGrade(percentage);
+            System.out.println("The grade is: " + grade);
+        } catch (Exception e) {
+            System.out.println("Invalid Input");
+        }
+
+        scanner.close();
+    }
+
+    public static String getGrade(double percentage) {
+        if (percentage >= 60) {
+            return "Grade A";
+        } else if (percentage >= 45) {
+            return "Grade B";
+        } else if (percentage >= 35) {
+            return "Grade C";
+        } else {
+            return "Fail";
+        }
+    }
+}
+[7/16, 7:38 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class OddEvenChecker {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter an integer: ");
+        
+        if (scanner.hasNextInt()) {
+            int number = scanner.nextInt();
+            if (isEven(number)) {
+                System.out.println("EVEN");
+            } else {
+                System.out.println("ODD");
+            }
+        } else {
+            System.out.println("Invalid Input");
+        }
+
+        scanner.close();
+    }
+
+    public static boolean isEven(int number) {
+        return number % 2 == 0;
+    }
+}
+[7/16, 7:38 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class LargestOfThree {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter three numbers separated by spaces: ");
+        
+        if (scanner.hasNextDouble()) {
+            double num1 = scanner.nextDouble();
+            double num2 = scanner.nextDouble();
+            double num3 = scanner.nextDouble();
+
+            double largest = findLargest(num1, num2, num3);
+            System.out.println("The largest number is: " + largest);
+        } else {
+            System.out.println("Invalid Input");
+        }
+
+        scanner.close();
+    }
+
+    public static double findLargest(double num1, double num2, double num3) {
+        if (num1 >= num2 && num1 >= num3) {
+            return num1;
+        } else if (num2 >= num1 && num2 >= num3) {
+            return num2;
+        } else {
+            return num3;
+        }
+    }
+}
+[7/16, 7:38 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class LCMCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter two numbers separated by a space: ");
+
+        if (scanner.hasNextInt()) {
+            int num1 = scanner.nextInt();
+            int num2 = scanner.nextInt();
+
+            int lcm = findLCM(num1, num2);
+            System.out.println("LCM is " + lcm);
+        } else {
+            System.out.println("Invalid Input");
+        }
+
+        scanner.close();
+    }
+
+    public static int findLCM(int num1, int num2) {
+        int gcd = findGCD(num1, num2);
+        return Math.abs(num1 * num2) / gcd;
+    }
+
+    public static int findGCD(int num1, int num2) {
+        while (num2 != 0) {
+            int temp = num2;
+            num2 = num1 % num2;
+            num1 = temp;
+        }
+        return num1;
+    }
+}
+[7/16, 7:38 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class GCDCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter two numbers separated by a space: ");
+
+        if (scanner.hasNextInt()) {
+            int num1 = scanner.nextInt();
+            int num2 = scanner.nextInt();
+
+            int gcd = findGCD(num1, num2);
+            System.out.println("HCF is " + gcd);
+        } else {
+            System.out.println("Invalid Input");
+        }
+
+        scanner.close();
+    }
+
+    public static int findGCD(int num1, int num2) {
+        while (num2 != 0) {
+            int temp = num2;
+            num2 = num1 % num2;
+            num1 = temp;
+        }
+        return num1;
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class PrimeNumbers {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a number N to find all prime numbers from 1 to N: ");
+
+        if (scanner.hasNextInt()) {
+            int N = scanner.nextInt();
+            if (N >= 2) {
+                boolean[] isPrime = new boolean[N + 1];
+                for (int i = 2; i <= N; i++) {
+                    isPrime[i] = true;
+                }
+
+                for (int p = 2; p * p <= N; p++) {
+                    if (isPrime[p]) {
+                        for (int i = p * p; i <= N; i += p) {
+                            isPrime[i] = false;
+                        }
+                    }
+                }
+
+                System.out.println("Prime numbers from 1 to " + N + ":");
+                for (int i = 2; i <= N; i++) {
+                    if (isPrime[i]) {
+                        System.out.print(i + " ");
+                    }
+                }
+                System.out.println();
+            } else {
+                System.out.println("No prime numbers exist for N < 2");
+            }
+        } else {
+            System.out.println("Invalid Input");
+        }
+
+        scanner.close();
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class LeapYearChecker {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a year: ");
+
+        if (scanner.hasNextInt()) {
+            int year = scanner.nextInt();
+
+            if (isLeapYear(year)) {
+                System.out.println(year + " is a Leap Year.");
+            } else {
+                System.out.println(year + " is not a Leap Year.");
+            }
+        } else {
+            System.out.println("Invalid Input");
+        }
+
+        scanner.close();
+    }
+
+    public static boolean isLeapYear(int year) {
+        // Leap year is divisible by 4
+        // It should not be divisible by 100 unless divisible by 400
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class VowelConsonantChecker {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a character: ");
+
+        if (scanner.hasNextLine()) {
+            String input = scanner.nextLine();
+            if (input.length() == 1) {
+                char ch = input.charAt(0);
+                if (isVowel(ch)) {
+                    System.out.println(ch + " is a Vowel.");
+                } else {
+                    System.out.println(ch + " is a Consonant.");
+                }
+            } else {
+                System.out.println("Invalid Input: Please enter exactly one character.");
+            }
+        } else {
+            System.out.println("Invalid Input");
+        }
+
+        scanner.close();
+    }
+
+    public static boolean isVowel(char ch) {
+        // Convert character to lowercase for case-insensitive comparison
+        ch = Character.toLowerCase(ch);
+        return ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u';
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class CompoundInterestCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        
+        System.out.print("Enter the principal amount: ");
+        double principal = scanner.nextDouble();
+
+      
+        System.out.print("Enter the annual interest rate (in percentage): ");
+        double rate = scanner.nextDouble();
+
+        
+        System.out.print("Enter the number of times interest is compounded per year: ");
+        int n = scanner.nextInt();
+
+        
+        System.out.print("Enter the time period (in years): ");
+        double time = scanner.nextDouble();
+
+       
+        double amount = principal * Math.pow(1 + (rate / (n * 100)), n * time);
+        double compoundInterest = amount - principal;
+
+         
+        System.out.println("Compound Interest: " + compoundInterest);
+
+        scanner.close();
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class SimpleInterestCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        
+        System.out.print("Enter the principal amount: ");
+        double principal = scanner.nextDouble();
+
+        
+        System.out.print("Enter the annual interest rate (in percentage): ");
+        double rate = scanner.nextDouble();
+
+        
+        System.out.print("Enter the time period (in years): ");
+        double time = scanner.nextDouble();
+
+        
+        double simpleInterest = (principal * rate * time) / 100;
+
+        
+        System.out.println("Simple Interest: " + simpleInterest);
+
+        scanner.close();
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class RectanglePerimeter {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        
+        System.out.print("Enter the length of the rectangle: ");
+        double length = scanner.nextDouble();
+
+        
+        System.out.print("Enter the width of the rectangle: ");
+        double width = scanner.nextDouble();
+
+        
+        double perimeter = 2 * (length + width);
+
+     
+        System.out.println("Perimeter of the rectangle: " + perimeter);
+
+        scanner.close();
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class ReverseNumber {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter an integer: ");
+
+        if (scanner.hasNextInt()) {
+            int number = scanner.nextInt();
+            int reversedNumber = reverseDigits(number);
+            System.out.println("Reversed number: " + reversedNumber);
+        } else {
+            System.out.println("Invalid Input: Please enter an integer.");
+        }
+
+        scanner.close();
+    }
+
+    public static int reverseDigits(int number) {
+        int reversedNumber = 0;
+        while (number != 0) {
+            int digit = number % 10;
+            reversedNumber = reversedNumber * 10 + digit;
+            number /= 10;
+        }
+        return reversedNumber;
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class PowerCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+       
+        System.out.print("Enter the base number: ");
+        double base = scanner.nextDouble();
+
+    
+        System.out.print("Enter the exponent (a non-negative integer): ");
+        int exponent = scanner.nextInt();
+
+      
+        double result = power(base, exponent);
+
+ 
+        System.out.println(base + " raised to the power of " + exponent + " is: " + result);
+
+        scanner.close();
+    }
+
+    public static double power(double base, int exponent) {
+        
+        if (exponent == 0) {
+            return 1;
+        }
+
+        double result = 1;
+        
+        for (int i = 1; i <= exponent; i++) {
+            result *= base;
+        }
+        return result;
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class SimpleCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter a simple arithmetic operation (e.g., 83+): ");
+        String input = scanner.nextLine();
+
+        try {
+            if (input.contains("+")) {
+                String[] parts = input.split("\\+");
+
+                if (parts.length == 2) {
+                    int num1 = Integer.parseInt(parts[0].trim());
+                    int num2 = Integer.parseInt(parts[1].trim());
+
+                    int result = num1 + num2;
+                    System.out.println("Output: " + result);
+                } else {
+                    System.out.println("Invalid Input");
+                }
+            } else {
+                System.out.println("Invalid Input");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid Input");
+        }
+
+        scanner.close();
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class ArmstrongNumberChecker {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        
+        System.out.print("Enter the starting number of the range: ");
+        int start = scanner.nextInt();
+        System.out.print("Enter the ending number of the range: ");
+        int end = scanner.nextInt();
+
+        System.out.println("Armstrong numbers between " + start + " and " + end + ":");
+        
+      
+        for (int number = start; number <= end; number++) {
+            if (isArmstrong(number)) {
+                System.out.println(number);
+            }
+        }
+
+        scanner.close();
+    }
+
+    public static boolean isArmstrong(int number) {
+        int originalNumber, remainder, result = 0, n = 0;
+
+        originalNumber = number;
+
+      
+        while (originalNumber != 0) {
+            originalNumber /= 10;
+            ++n;
+        }
+
+        originalNumber = number;
+
+      
+        while (originalNumber != 0) {
+            remainder = originalNumber % 10;
+            result += Math.pow(remainder, n);
+            originalNumber /= 10;
+        }
+
+        
+        return result == number;
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class FactorialCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter a number to find its factorial: ");
+        int number = scanner.nextInt();
+
+        if (number < 0) {
+            System.out.println("Factorial is not defined for negative numbers.");
+        } else {
+            long factorial = calculateFactorial(number);
+            System.out.println("The factorial of " + number + " is: " + factorial);
+        }
+
+        scanner.close();
+    }
+
+    public static long calculateFactorial(int n) {
+        long result = 1;
+        for (int i = 1; i <= n; i++) {
+            result *= i;
+        }
+        return result;
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class NeonNumberChecker {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        
+        System.out.print("Enter a number to check if it's a Neon number: ");
+        int number = scanner.nextInt();
+
+        
+        if (isNeonNumber(number)) {
+            System.out.println(number + " is a Neon number.");
+        } else {
+            System.out.println(number + " is not a Neon number.");
+        }
+
+        scanner.close();
+    }
+
+    public static boolean isNeonNumber(int number) {
+       
+        int square = number * number;
+
+   
+        int sumOfDigits = 0;
+        while (square > 0) {
+            int digit = square % 10;
+            sumOfDigits += digit;
+            square /= 10;
+        }
+
+  
+        return sumOfDigits == number;
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class RightTriangleStarPattern {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int rows = scanner.nextInt();
+
+        for (int i = 1; i <= rows; i++) {
+            for (int j = 1; j <= i; j++) {
+                System.out.print("* ");
+            }
+            System.out.println();
+        }
+
+        scanner.close();
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class FibonacciEvenIndexSum {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the value of N: ");
+        int N = scanner.nextInt();
+
+        if (N < 0) {
+            System.out.println("N must be a non-negative integer.");
+        } else {
+            long sum = calculateSumOfEvenIndexFibonacci(N);
+            System.out.println("The sum of the first " + N + " Fibonacci numbers at even indexes is: " + sum);
+        }
+
+        scanner.close();
+    }
+
+    public static long calculateSumOfEvenIndexFibonacci(int N) {
+        if (N == 0) {
+            return 0;
+        }
+
+        
+        long a = 0;
+        long b = 1;
+
+      
+        long sum = a;
+        int count = 1; // Since we already considered F(0)
+
+        
+        while (count < N) {
+            long next = a + b;
+            a = b;
+            b = next;
+
+            if (count % 2 == 0) {
+                sum += a; // Add the number at the even index
+            }
+
+            count++;
+        }
+
+        return sum;
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class ReversePyramidStarPattern {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int rows = scanner.nextInt();
+
+        for (int i = rows; i >= 1; i--) {
+            
+            for (int j = rows; j > i; j--) {
+                System.out.print(" ");
+            }
+            
+            for (int k = 1; k <= (2 * i - 1); k++) {
+                System.out.print("*");
+            }
+            System.out.println();
+        }
+
+        scanner.close();
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: Import java.util.Scanner;
+
+public class UpperStarTrianglePattern {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int rows = scanner.nextInt();
+
+        for (int i = 1; i <= rows; i++) {
+           
+            for (int j = rows - i; j > 0; j--) {
+                System.out.print(" ");
+            }
+            
+            for (int k = 1; k <= i; k++) {
+                System.out.print("* ");
+            }
+            System.out.println();
+        }
+
+        scanner.close();
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class DiamondStarPattern {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows for the upper half of the diamond: ");
+        int rows = scanner.nextInt();
+
+        
+        for (int i = 1; i <= rows; i++) {
+            
+            for (int j = rows - i; j > 0; j--) {
+                System.out.print(" ");
+            }
+            
+            for (int k = 1; k <= (2 * i - 1); k++) {
+                System.out.print("*");
+            }
+            System.out.println();
+        }
+
+        
+        for (int i = rows - 1; i >= 1; i--) {
+            
+
+            for (int j = rows - i; j > 0; j--) {
+                System.out.print(" ");
+            }
+            
+            for (int k = 1; k <= (2 * i - 1); k++) {
+                System.out.print("*");
+            }
+            System.out.println();
+        }
+
+        scanner.close();
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class RightAngleTriangleStarPattern {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int rows = scanner.nextInt();
+
+        for (int i = 1; i <= rows; i++) {
+            for (int j = 1; j <= i; j++) {
+                System.out.print("* ");
+            }
+            System.out.println();
+        }
+
+        scanner.close();
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class SquareStarPattern {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows for the square pattern: ");
+        int rows = scanner.nextInt();
+
+        for (int i = 1; i <= rows; i++) {
+            for (int j = 1; j <= rows; j++) {
+                System.out.print("* ");
+            }
+            System.out.println();
+        }
+
+        scanner.close();
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class SimpleCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter a simple arithmetic operation  ");
+        String input = scanner.nextLine();
+
+        try {
+            int result = 0;
+
+            if (input.endsWith("+")) {
+                String[] parts = input.split("\\+");
+                if (parts.length == 1) {
+                    int num1 = Integer.parseInt(parts[0].substring(0, parts[0].length() - 1).trim());
+                    int num2 = Integer.parseInt(parts[0].substring(parts[0].length() - 1).trim());
+                    result = num1 + num2;
+                }
+            } else if (input.endsWith("-")) {
+                String[] parts = input.split("-");
+                if (parts.length == 1) {
+                    int num1 = Integer.parseInt(parts[0].substring(0, parts[0].length() - 1).trim());
+                    int num2 = Integer.parseInt(parts[0].substring(parts[0].length() - 1).trim());
+                    result = num1 - num2;
+                }
+            } else if (input.endsWith("*")) {
+                String[] parts = input.split("\\*");
+                if (parts.length == 1) {
+                    int num1 = Integer.parseInt(parts[0].substring(0, parts[0].length() - 1).trim());
+                    int num2 = Integer.parseInt(parts[0].substring(parts[0].length() - 1).trim());
+                    result = num1 * num2;
+                }
+            } else if (input.endsWith("/")) {
+                String[] parts = input.split("/");
+                if (parts.length == 1) {
+                    int num1 = Integer.parseInt(parts[0].substring(0, parts[0].length() - 1).trim());
+                    int num2 = Integer.parseInt(parts[0].substring(parts[0].length() - 1).trim());
+                    result = num1 / num2;
+                }
+            } else {
+                System.out.println("Invalid Input");
+                scanner.close();
+                return;
+            }
+
+            System.out.println("Output: " + result);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid Input");
+        }
+
+        scanner.close();
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class SquareBorderStarPattern {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows for the square pattern: ");
+        int rows = scanner.nextInt();
+
+        for (int i = 1; i <= rows; i++) {
+            for (int j = 1; j <= rows; j++) {
+                
+                if (i == 1 || i == rows || j == 1 || j == rows) {
+                    System.out.print("* ");
+                } else {
+                    System.out.print("  ");
+                }
+            }
+            System.out.println();
+        }
+
+        scanner.close();
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class OppositeLeftAngleTriangleStarPattern {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int rows = scanner.nextInt();
+
+        for (int i = 1; i <= rows; i++) {
+            
+            for (int j = rows - i; j > 0; j--) {
+                System.out.print("  ");
+            }
+            
+           
+            for (int k = 1; k <= i; k++) {
+                System.out.print("* ");
+            }
+            
+            
+            System.out.println();
+        }
+
+        scanner.close();
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: import java.util.Scanner;
+
+public class SimpleAdditionCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter a simple addition operation ");
+        String input = scanner.nextLine();
+
+        try {
+            
+            if (input.endsWith("+")) {
+                
+                String numbersPart = input.substring(0, input.length() - 1);
+
+                
+                String[] parts = numbersPart.split("\\+");
+
+                if (parts.length == 1) {
+                    
+                    int num1 = Integer.parseInt(parts[0].substring(0, parts[0].length() - 1).trim());
+                    int num2 = Integer.parseInt(parts[0].substring(parts[0].length() - 1).trim());
+
+                    
+                    int result = num1 + num2;
+
+                    
+                    System.out.println("Output: " + result);
+                } else {
+                    System.out.println("Invalid Input");
+                }
+            } else {
+                System.out.println("Invalid Input");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid Input");
+        }
+
+        scanner.close();
+    }
+}
+[7/16, 7:39 PM] Karthi - MPHASIS Karur: public class ComplexNumber {
+    private double real;
+    private double imaginary;
+
+    
+    public ComplexNumber(double real, double imaginary) {
+        this.real = real;
+        this.imaginary = imaginary;
+    }
+
+ 
+    public ComplexNumber add(ComplexNumber other) {
+        double newReal = this.real + other.real;
+        double newImaginary = this.imaginary + other.imaginary;
+        return new ComplexNumber(newReal, newImaginary);
+    }
+
+    @Override
+    public String toString() {
+        return "(" + real + " + " + imaginary + "i)";
+    }
+
+    public static void main(String[] args) {
+        ComplexNumber complex1 = new ComplexNumber(2, 3);
+        ComplexNumber complex2 = new ComplexNumber(4, -5);
+
+        ComplexNumber sum = complex1.add(complex2);
+
+        System.out.println("The sum of " + complex1 + " and " + complex2 + " is: " + sum);
+    }
+}
