@@ -1,0 +1,45 @@
+package MathanProject;
+import java.util.*;
+
+public class Demo {
+
+
+	public void mymethod()   
+	{  
+		System.out.println("Method");  
+	}  
+
+	{  
+		System.out.println(" Instance Block");  
+	}  
+
+	public void Demo()  
+	{  
+		System.out.println("Constructor ");  
+	}  
+	static {  
+		System.out.println("static block");  
+	}  
+	public static void main(String[] args) { 
+		Demo c = new Demo();
+		c.mymethod();
+
+		Demo d = new Demo();
+
+		c.Demo();  
+
+
+	} 
+} 
+
+//----------------------output-------------------------------
+
+//static block
+//Instance Block
+//Method           
+//Instance Block
+//Constructor 
+
+
+
+
