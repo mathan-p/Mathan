@@ -1,12 +1,11 @@
-1. Vehicle Interface
+// Vehicle Interface
 public interface Vehicle {
     void start();
     void accelerate();
     void brake();
 }
 
- 2. Concrete Vehicle Classes
-
+// Concrete Vehicle Classes
 public class Car implements Vehicle {
     @Override
     public void start() {
@@ -58,10 +57,11 @@ public class Truck implements Vehicle {
     }
 }
 
- 3. VehicleFactory Class
-
+// VehicleFactory Class
 public class VehicleFactory {
+    // Method to create a vehicle based on the given type
     public Vehicle createVehicle(String type) {
+        // Convert the type to uppercase to handle case-insensitivity
         switch (type.toUpperCase()) {
             case "CAR":
                 return new Car();
@@ -70,31 +70,34 @@ public class VehicleFactory {
             case "TRUCK":
                 return new Truck();
             default:
+                // Throw an exception if the vehicle type is unknown
                 throw new IllegalArgumentException("Unknown vehicle type: " + type);
         }
     }
 }
 
- 4. Main Class
-
+// Main Class
 public class Main {
     public static void main(String[] args) {
+        // Create an instance of VehicleFactory
         VehicleFactory factory = new VehicleFactory();
 
+        // Create a Car and perform actions
         Vehicle car = factory.createVehicle("car");
         car.start();
         car.accelerate();
         car.brake();
 
+        // Create a Motorcycle and perform actions
         Vehicle motorcycle = factory.createVehicle("motorcycle");
         motorcycle.start();
         motorcycle.accelerate();
         motorcycle.brake();
 
+        // Create a Truck and perform actions
         Vehicle truck = factory.createVehicle("truck");
         truck.start();
         truck.accelerate();
         truck.brake();
     }
 }
-
