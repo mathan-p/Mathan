@@ -1,0 +1,100 @@
+1. Vehicle Interface
+public interface Vehicle {
+    void start();
+    void accelerate();
+    void brake();
+}
+
+ 2. Concrete Vehicle Classes
+
+public class Car implements Vehicle {
+    @Override
+    public void start() {
+        System.out.println("Car started.");
+    }
+
+    @Override
+    public void accelerate() {
+        System.out.println("Car accelerating.");
+    }
+
+    @Override
+    public void brake() {
+        System.out.println("Car braking.");
+    }
+}
+
+public class Motorcycle implements Vehicle {
+    @Override
+    public void start() {
+        System.out.println("Motorcycle started.");
+    }
+
+    @Override
+    public void accelerate() {
+        System.out.println("Motorcycle accelerating.");
+    }
+
+    @Override
+    public void brake() {
+        System.out.println("Motorcycle braking.");
+    }
+}
+
+public class Truck implements Vehicle {
+    @Override
+    public void start() {
+        System.out.println("Truck started.");
+    }
+
+    @Override
+    public void accelerate() {
+        System.out.println("Truck accelerating.");
+    }
+
+    @Override
+    public void brake() {
+        System.out.println("Truck braking.");
+    }
+}
+
+ 3. VehicleFactory Class
+
+public class VehicleFactory {
+    public Vehicle createVehicle(String type) {
+        switch (type.toUpperCase()) {
+            case "CAR":
+                return new Car();
+            case "MOTORCYCLE":
+                return new Motorcycle();
+            case "TRUCK":
+                return new Truck();
+            default:
+                throw new IllegalArgumentException("Unknown vehicle type: " + type);
+        }
+    }
+}
+
+ 4. Main Class
+
+public class Main {
+    public static void main(String[] args) {
+        VehicleFactory factory = new VehicleFactory();
+
+        Vehicle car = factory.createVehicle("car");
+        car.start();
+        car.accelerate();
+        car.brake();
+
+        Vehicle motorcycle = factory.createVehicle("motorcycle");
+        motorcycle.start();
+        motorcycle.accelerate();
+        motorcycle.brake();
+
+        Vehicle truck = factory.createVehicle("truck");
+        truck.start();
+        truck.accelerate();
+        truck.brake();
+    }
+}
+
