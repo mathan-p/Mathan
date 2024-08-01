@@ -1,0 +1,553 @@
+ 
+
+ 
+
+Camera Class  
+
+package maddy;  
+
+public class Camera {  
+
+private final int id;  
+
+private final String brand;  
+
+private final String model;  
+
+private final double rentalAmount;  
+
+private  String status;  
+
+public Camera(int id, String brand, String model, double rentalAmount, String status) {  
+
+this.id = id;  
+
+this.brand = brand;  
+
+this.model = model;  
+
+this.rentalAmount = rentalAmount;  
+
+this.status = status;  
+
+}  
+
+public int getId() {  
+
+return id;  
+
+}  
+
+public String getBrand() {  
+
+return brand;  
+
+}  
+
+public String getModel() {  
+
+return model;  
+
+}  
+
+public double getRentalAmount() {  
+
+return rentalAmount;  
+
+}  
+
+public String getStatus() {  
+
+return status;  
+
+}  
+
+public void setStatus(String status) {  
+
+this.status = status;  
+
+}  
+
+}  
+
+ 
+
+CameraModule Class  
+
+ 
+
+package maddy;  
+
+import java.util.ArrayList;  
+
+import java.util.Iterator;  
+
+import java.util.Scanner;  
+
+public class CameraModule {  
+
+private static ArrayList<Camera> cameras = new ArrayList<>();  
+
+private static final Scanner scanner = new Scanner(System.in);  
+
+static int id = 0;  
+
+public static void addCamera() {  
+
+try {  
+
+System.out.println("ENTER THE CEMERA BRAND : ");  
+
+String brand = scanner.next();  
+
+System.out.println("ENTER THE MODEL : ");  
+
+String model = scanner.next();  
+
+System.out.println("ENTER THE PER DAY PRICE : ");  
+
+double rentalAmount = scanner.nextDouble();  
+
+scanner.nextLine();  
+
+if (rentalAmount < 0) {  
+
+throw new IllegalArgumentException("RENTAL AMOUNT CANNOT BE NEGATIVE.");  
+
+}  
+
+id = id+1;  
+
+String status = "Available";  
+
+cameras.add(new Camera(id, brand, model, rentalAmount, status));  
+
+System.out.println("YOUR CEMERA HAS BEEN ADDED SUCCESSFULLY.");  
+
+} catch (Exception e) {  
+
+System.out.println("Error: " + e.getMessage());  
+
+}  
+
+}  
+
+ 
+
+public static void listCameras() {  
+
+if (cameras.isEmpty()) {  
+
+System.out.println("NO CAMERAS AVAILABLE FOR RENT.");  
+
+} else {  
+
+System.out.println("\n--- AVAILABLE CAMERAS ---");  
+
+System.out.println("---------------------------------------------------------------------------------------");  
+
+System.out.printf("| %-10s | %-20s | %-15s | %-15s | %-20s |\n", "ID", "BRAND", "MODEL", "PRICE", "STATUS");  
+
+System.out.println("---------------------------------------------------------------------------------------");  
+
+for (Camera camera : cameras) {  
+
+System.out.printf("| %-10d | %-20s | %-15s| %-15.0f | %-20s |\n", camera.getId(), camera.getBrand(),  
+
+camera.getModel(), camera.getRentalAmount(), camera.getStatus());  
+
+System.out.println(  
+
+"--------------------------------------------------------------------------------------");  
+
+}  
+
+}  
+
+}  
+
+public static void rentCamera() {  
+
+boolean b=false;  
+
+if (cameras.isEmpty()) {  
+
+System.out.println("NO CAMERAS AVAILABLE FOR RENT");  
+
+return;  
+
+}  
+
+listCameras();  
+
+System.out.print("ENTER THE INDEX OF THE CAMERA TO RENT: ");  
+
+int index = scanner.nextInt();  
+
+if (index < 0) {  
+
+System.out.println("INVALID CAMERA INDEX.");  
+
+return;  
+
+}  
+
+if (index > 0) {  
+
+for (Camera camera : cameras) {  
+
+if (camera.getId() == index && camera.getStatus().equals("Available")) {  
+
+if (WalletModule.getWalletBalance() >= camera.getRentalAmount()) {  
+
+WalletModule.deductAmount(camera.getRentalAmount());  
+
+camera.setStatus("Rented");  
+
+b=true;  
+
+System.out.println("CAMERA RENTED SUCCESSFULLY. AMOUNT DEDUCTED: " + camera.getRentalAmount());  
+
+} else {  
+
+System.out.println("INSUFFICIENT WALLET BALANCE. PLEASE ADD FUNDS TO YOUR WALLET.");  
+
+}  
+
+}  
+
+}  
+
+}  
+
+if(b==false){  
+
+System.out.println("SORRY THIS PRODUCT IS NOT AVAILABLE");  
+
+}  
+
+}  
+
+public static void removeCamera() {  
+
+System.out.println("ENTER CEMERA ID : ");  
+
+int index = scanner.nextInt();  
+
+Iterator<Camera> iterator = cameras.iterator();  
+
+boolean remove = false;  
+
+while (iterator.hasNext()) {  
+
+Camera camera = iterator.next();  
+
+if (camera.getId() == index) {  
+
+iterator.remove();  
+
+remove = true;  
+
+}  
+
+}  
+
+if (remove) {  
+
+System.out.println("CAMERA REMOVED SUCCESSFULLY");  
+
+} else {  
+
+System.out.println("CAMERA IS NOT PRESENT");  
+
+}  
+
+}  
+
+}  
+
+ 
+
+ 
+
+ 
+
+WalletModule Class 
+
+  
+
+package maddy;  
+
+import java.util.Scanner;  
+
+public class WalletModule {  
+
+private static double walletBalance = 0.0;  
+
+private static final Scanner scanner = new Scanner(System.in);  
+
+public static double getWalletBalance() {  
+
+return walletBalance;  
+
+}  
+
+public static void deductAmount(double amount) {  
+
+walletBalance -= amount;  
+
+}  
+
+public static void manageWallet() {  
+
+boolean condition = true;  
+
+while (condition) {  
+
+System.out.println("YOUR CURRENT WALLET BALENCE IS : INR." + walletBalance);  
+
+System.out.print("DO YOU WANT TO DEPOSITE MORE AMOUNT TO YOUR WALLET?(1.YES   2.NO) - ");  
+
+int choice = scanner.nextInt();  
+
+switch (choice) {  
+
+case 1:  
+
+System.out.print("ENTER THE AMOUNT  -  ");  
+
+double amount = scanner.nextDouble();  
+
+if (amount > 0) {  
+
+walletBalance += amount;  
+
+System.out.println(  
+
+"YOUR WALLET BALENCE UPDATED SUCCESSFULLY. CURRENT WALLET BALANCE - INR" + walletBalance);  
+
+System.out.println(  
+
+"------------------------------------------------------------------------------------------------------------------------------");  
+
+break;  
+
+} else {  
+
+System.out.println("----------------------------------------");  
+
+System.out.println("PLEASE ENTER VALID AMOUNT");  
+
+System.out.println("----------------------------------------");  
+
+break;  
+
+}  
+
+case 2:  
+
+condition = false;  
+
+break;  
+
+default:  
+
+System.out.println("INVALID CHOICE. PLEASE TRY AGAIN.");  
+
+}  
+
+}  
+
+}  
+
+}  
+
+CameraRentalApplication Class  
+
+ 
+
+package maddy;   
+
+import java.util.Scanner;  
+
+public class CameraRentalApplication {  
+
+private static final Scanner scanner = new Scanner(System.in);  
+
+private static void wecomeScreen() throws InterruptedException {  
+
+System.out.println("---------------------------------------------------------------");  
+
+Thread.sleep(1000);  
+
+System.err.println("WELCOME TO CAMERA RENTAL APP ");  
+
+Thread.sleep(1000);  
+
+System.err.println(“     DEVELOPED BY : BAVASREE");  
+
+Thread.sleep(1000);  
+
+System.out.println("---------------------------------------------------------------");  
+
+}  
+
+private static void userMenu() {  
+
+boolean condition = true;  
+
+while (condition) {  
+
+System.out.println("---------------------------------");  
+
+System.out.println("1. ADD");  
+
+System.out.println("2. REMOVE");  
+
+System.out.println("3. VIEW MY CEMERA");  
+
+System.out.println("4. GO TO PREVIOUS MENU");  
+
+System.out.println("---------------------------------");  
+
+System.out.println("ENTER YOUR CHOICE: ");  
+
+System.out.println("---------------------------------");  
+
+int choice = scanner.nextInt();  
+
+switch (choice) {  
+
+case 1:  
+
+CameraModule.addCamera();  
+
+break;  
+
+case 2:  
+
+CameraModule.removeCamera();  
+
+break;  
+
+case 3:  
+
+CameraModule.listCameras();  
+
+break;  
+
+case 4:  
+
+condition = false;  
+
+break;  
+
+default:  
+
+System.out.println("INVALID CHOICE. PLEASE TRY AGAIN.");  
+
+}  
+
+}  
+
+}  
+
+ 
+
+public static void main(String[] args) throws InterruptedException {  
+
+wecomeScreen();  
+
+System.out.println("PLEASE LOGIN TO CONTINUE : ");  
+
+System.out.print("USERNAME  -  ");//admin  
+
+String name = scanner.nextLine();  
+
+System.out.print("PASSWORD  -  ");//admin123  
+
+String password = scanner.nextLine();  
+
+if (name.equals("admin") && password.equals("admin123")) {  
+
+while (true) {  
+
+System.out.println("-------------------------------");  
+
+System.out.println("1. MY CEMERA");  
+
+System.out.println("2. RENT A CEMERA");  
+
+System.out.println("3. VIEW ALL CEMERAS");  
+
+System.out.println("4. MY WALLET");  
+
+System.out.println("5. EXIT");  
+
+System.out.println("-------------------------------");  
+
+System.out.println("ENTER YOUR CHOICE: ");  
+
+System.out.println("-------------------------------");  
+
+int choice = scanner.nextInt();  
+
+scanner.nextLine();  
+
+switch (choice) {  
+
+case 1:  
+
+userMenu();  
+
+break;  
+
+case 2:  
+
+CameraModule.rentCamera();  
+
+break;  
+
+case 3:  
+
+CameraModule.listCameras();  
+
+break;  
+
+case 4:  
+
+WalletModule.manageWallet();  
+
+break;  
+
+case 5:  
+
+System.out.println("EXITING APPLICATION.......");  
+
+Thread.sleep(1000);  
+
+System.out.println("-------------------------------");  
+
+Thread.sleep(300);  
+
+System.err.println("              THANK YOU               ");  
+
+Thread.sleep(300);  
+
+System.out.println("-------------------------------");  
+
+System.exit(0);  
+
+default:  
+
+System.out.println("INVALID CHOICE. PLEASE TRY AGAIN.");  
+
+}  
+
+}  
+
+} else {  
+
+System.out.println("PLEASE ENTER VALID DATA");  
+
+} } } 
