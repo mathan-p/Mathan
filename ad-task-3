@@ -1,0 +1,245 @@
+Day 3
+-------------------------------------------------------------------------------------------------------------
+ 
+
+Registration.jsp 
+ 
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>  
+<!DOCTYPE html>  
+<html>  
+<head>  
+<title>Registration</title>  
+<style>  
+.error { color: red; }  
+</style>  
+</head>  
+<body>  
+<h2>User Registration</h2>  
+<form action="register" method="post">  
+First Name: <input type="text" name="firstName" required/><br/> <br> 
+Last Name: <input type="text" name="lastName" required/><br/> <br> 
+Country:  
+<select name="country" required>  
+<option value="">Select Country</option>  
+<option value="USA">USA</option>  
+<option value="Canada">Canada</option>  
+<option value="UK">UK</option>  
+<!-- Add more countries as needed -->  
+</select><br/> <br> 
+Languages Known: <br/>  
+<input type="checkbox" name="languages" value="English"/> English<br/>  
+<input type="checkbox" name="languages" value="Spanish"/> Spanish<br/>  
+<input type="checkbox" name="languages" value="French"/> French<br/>  
+<!-- Add more languages as needed -->  
+<br/>  
+Gender:  
+<input type="radio" name="gender" value="Male" required/> Male  
+<input type="radio" name="gender" value="Female" required/> Female  
+<input type="radio" name="gender" value="Other" required/> Other<br/> <br> 
+<input type="submit" value="Submit"/>  
+<input type="reset" value="Reset"/>  
+</form>  
+</body>  
+</html> 
+ 
+-------------------------------------------------------------------------------------------------------------
+SuccessPage.jsp 
+ 
+<!DOCTYPE html>  
+<html>  
+<head>  
+<title>Registration Success</title>  
+</head>  
+<body>  
+<h2>Registration Successful</h2>  
+<p>Thank you</p>  
+<a href="registration.jsp">For New User</a>  
+</body>  
+</html> 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+Error.jsp 
+ 
+<%@ page isErrorPage="true" %>  
+<!DOCTYPE html>  
+<html>  
+<head>  
+<title>Error</title>  
+<style>  
+.error { color: red; }  
+</style>  
+</head>  
+<body>  
+<h2>Error</h2>  
+<p class="error"><%= request.getAttribute("errorMessage") %></p>  
+<a href="registration.jsp">Back to Registration</a>  
+</body>  
+</html> 
+ 
+ -------------------------------------------------------------------------------------------------------------
+ 
+RegisterDAO.java 
+ 
+import java.sql.*;  
+public class RegisterDAO {  
+public void registerUser(User user) throws SQLException, ClassNotFoundException {  
+Class.forName("com.mysql.jdbc.Driver");  
+// Assume you have a DataSource for database connection  
+try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/userdb", "root", "Password@12")) {  
+String query = "INSERT INTO users (first_name, last_name, country, languages_known, gender) VALUES (?, ?, ?, ?, ?)";  
+try (PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {  
+ps.setString(1, user.getFirstName());  
+ps.setString(2, user.getLastName());  
+ps.setString(3, user.getCountry());  
+ps.setString(4, String.join(",", user.getLanguagesKnown())); // Convert list to comma-separated string  
+ps.setString(5, user.getGender());  
+ps.executeUpdate();  
+try (ResultSet rs = ps.getGeneratedKeys()) {  
+if (rs.next()) {  
+user.setRegistrationId(rs.getString(1));  
+}  
+}  
+}  
+}  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+RegistrationServlet.java 
+ 
+import java.io.IOException;  
+import java.sql.SQLException;  
+import jakarta.servlet.ServletException;  
+import jakarta.servlet.annotation.WebServlet;  
+import jakarta.servlet.http.HttpServlet;  
+import jakarta.servlet.http.HttpServletRequest;  
+import jakarta.servlet.http.HttpServletResponse;  
+ 
+@WebServlet("/register")  
+public class RegistrationServlet extends HttpServlet {  
+protected void doPost(HttpServletRequest request, HttpServletResponse response)  
+throws ServletException, IOException {  
+User user = new User();  
+user.setFirstName(request.getParameter("firstName"));  
+user.setLastName(request.getParameter("lastName"));  
+user.setCountry(request.getParameter("country"));  
+user.setLanguagesKnown(request.getParameterValues("languages"));  
+user.setGender(request.getParameter("gender"));  
+ 
+RegistrationBO registrationBO = new RegistrationBO();  
+try {  
+registrationBO.validateUser(user);  
+RegisterDAO registerDAO = new RegisterDAO();  
+try {  
+registerDAO.registerUser(user);  
+} catch (ClassNotFoundException e) {  
+// TODO Auto-generated catch block  
+e.printStackTrace();  
+}  
+ 
+request.setAttribute("user", user);  
+request.getRequestDispatcher("successPage.jsp").forward(request, response);  
+} catch (BusinessException e) {  
+request.setAttribute("errorMessage", e.getMessage());  
+request.getRequestDispatcher("error.jsp").forward(request, response);  
+} catch (SQLException e) {  
+throw new ServletException("Database error", e);  
+}  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+RegistrationBO.java 
+ 
+public class RegistrationBO {  
+public void validateUser(User user) throws BusinessException {  
+if (user.getFirstName() == null || user.getFirstName().trim().isEmpty()) {  
+throw new BusinessException("First Name is required.");  
+}  
+if (user.getLastName() == null || user.getLastName().trim().isEmpty()) {  
+throw new BusinessException("Last Name is required.");  
+}  
+if (user.getCountry() == null || user.getCountry().trim().isEmpty()) {  
+throw new BusinessException("Country is required.");  
+}  
+if (user.getLanguagesKnown() == null || user.getLanguagesKnown().length == 0) {  
+throw new BusinessException("At least one language must be selected.");  
+}  
+if (user.getGender() == null || user.getGender().trim().isEmpty()) {  
+throw new BusinessException("Gender is required.");  
+}  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+
+
+
+User.java 
+ 
+public class User {  
+private String firstName;  
+private String lastName;  
+private String country;  
+public String getFirstName() {  
+return firstName;  
+}  
+public void setFirstName(String firstName) {  
+this.firstName = firstName;  
+}  
+public String getLastName() {  
+return lastName;  
+}  
+public void setLastName(String lastName) {  
+this.lastName = lastName;  
+}  
+public String getCountry() {  
+return country;  
+}  
+public void setCountry(String country) {  
+this.country = country;  
+}  
+public String[] getLanguagesKnown() {  
+return languagesKnown;  
+}  
+public void setLanguagesKnown(String[] languagesKnown) {  
+this.languagesKnown = languagesKnown;  
+}  
+public String getGender() {  
+return gender;  
+}  
+public void setGender(String gender) {  
+this.gender = gender;  
+}  
+public String getRegistrationId() {  
+return registrationId;  
+}  
+public void setRegistrationId(String registrationId) {  
+this.registrationId = registrationId;  
+}  
+private String[] languagesKnown;  
+private String gender;  
+private String registrationId;  
+} 
+BusinessException.java 
+public class BusinessException extends Exception {  
+public BusinessException(String message) {  
+super(message);  
+}  
+} 
+ 
+---------------------------------------------------------------------------------------------------------------------
+Web.xml 
+ 
+<?xml version="1.0" encoding="UTF-8"?> 
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd" id="WebApp_ID" version="5.0"> 
+<display-name>MyFriend</display-name> 
+<welcome-file-list>  
+ 
+<welcome-file>registration.jsp</welcome-file>  
+ 
+</welcome-file-list>  
+</web-app> 
+ 
+
