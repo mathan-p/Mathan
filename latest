@@ -1,0 +1,655 @@
+Problem Statement 1: Develop a Login application with Servlet API :
+---------------------------------------------------------------------------------------------
+Login.html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+ <h2>Login Page</h2>
+  <form action="LoginServlet" method="post">
+    Username: <input type="text" name="username" required/><br>
+    Password: <input type="password" name="password" required/><br>
+    <input type="submit" value="login"/>
+  </form>
+</body>
+</html>
+ 
+------------------------------------------------------------------------------------------------------------------------------------
+Welcome.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome</title>
+</head>
+<body>
+  <h2>Welcome,username</h2>
+  <p>You have logged in successfully.</p>
+  <a href="LogoffServlet">Logoff</a>
+</body>
+</html>
+ 
+------------------------------------------------------------------------------------------------------------------------------------
+LoginServlet.java
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
+@WebServlet("/LoginServlet")
+public class LoginServlet extends HttpServlet {
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    String username = request.getParameter("username");
+    String password = request.getParameter("password");
+request.getSession().setAttribute("username", username);
+    LoginBO loginBO = new LoginBO();
+    try {
+      if (loginBO.validateUser(username, password)) {
+        HttpSession session = request.getSession();
+        session.setAttribute("username", username);
+        response.sendRedirect("Welcome.html");
+      } else {
+        response.sendRedirect("Login.html?error=Invalid Username/Password");
+      }
+    } catch (BusinessException | ClassNotFoundException e) {
+      response.sendRedirect("Login.html?error=" + e.getMessage());
+    }
+  }
+}
+ 
+----------------------------------------------------------------------------------------------------------------------------------------------
+LogoffServlet .java
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
+@WebServlet("/LogoffServlet")
+public class LogoffServlet extends HttpServlet {
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    HttpSession session = request.getSession(false);
+    if (session != null) {
+      session.invalidate();
+    }
+    response.sendRedirect("Login.html");
+  }
+}
+ 
+----------------------------------------------------------------------------------------------------------------------------------------------
+LoginDAO .java
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+public class LoginDAO {
+  private static final String url = "jdbc:mysql://localhost:3306/YourDatabase";
+  private static final String user = "root";
+  private static final String pass = "Password@12";
+  public boolean isValidUser(String username, String password) throws BusinessException, ClassNotFoundException {
+   boolean b=false;
+    try {Class.forName("com.mysql.cj.jdbc.Driver");
+     Connection connection = DriverManager.getConnection(url, user, pass);
+      String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+      try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        preparedStatement.setString(1, username);
+        preparedStatement.setString(2, password);
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+          b= resultSet.next(); // If a result is found, user is valid
+        }
+      }
+    } catch (Exception e) {
+      throw new BusinessException("Database error: " + e.getMessage());
+    }
+    return b;
+  }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+LoginBO.java
+public class LoginBO {
+  public boolean validateUser(String username, String password) throws BusinessException, ClassNotFoundException {
+    LoginDAO loginDAO = new LoginDAO();
+    return loginDAO.isValidUser(username, password);
+  }
+}
+ 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+BusinessException.java
+public class BusinessException extends Exception {
+  public BusinessException(String message) {
+    super(message);
+  }
+}
+-------------------------------------------------------------------------------------------------
+user.java
+public class User {
+  private String username;
+  private String password;
+  // Constructor
+  public User(String username, String password) {
+    this.username = username;
+    this.password = password;
+  }
+  // Getters and Setters
+  public String getUsername() {
+    return username;
+  }
+  public void setUsername(String username) {
+    this.username = username;
+  }
+  public String getPassword() {
+    return password;
+  }
+  public void setPassword(String password) {
+    this.password = password;
+  }
+}
+ 
+ 
+Day 2
+-------------------------------------------------------------------------------------------------------------
+SQL Commands 
+use mphasis; 
+  
+create table Login(  
+username varchar(20) not null, 
+password varchar(20) not null); 
+  
+desc login; 
+insert into Login values('Admin','admin'); 
+insert into Login values('vicky','vicky'); 
+select * from Login; 
+ 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+Login.jsp 
+ 
+<!DOCTYPE html>  
+<html>  
+<head>  
+<title>Login</title>  
+</head>  
+<body>  
+<h2 align="center">Login</h2>  
+<form align="center" action="./LoginServlet" method="post">  
+Username: <input type="text" name="username"><br> <br> 
+Password: <input type="password" name="password"><br> <br> 
+<input type="submit" value="Login">  
+</form>  
+</body>  
+</html> 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+Welcome.jsp 
+ 
+<%@ page import="jakarta.servlet.http.*,jakarta.servlet.*" %>  
+<!DOCTYPE html>  
+<html>  
+<head>  
+<title>Welcome</title>  
+</head>  
+<body>  
+<h2 align="center">Welcome, <%= session.getAttribute("username") %></h2>  
+<p align="center"><a href="LogoffServlet">Logoff</a> </p> 
+</body>  
+</html> 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+Error.jsp 
+ 
+<!DOCTYPE html>  
+<html>  
+<head>  
+<title>Error</title>  
+</head>  
+<body>  
+<h2 align="center">Error: <%= request.getAttribute("errorMessage") %></h2>  
+<p align="center"><a href="login.jsp">Go to Login Page</a> </p> 
+</body>  
+</html> 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+LoginServlet.java 
+ 
+package com;  
+ 
+import java.io.IOException;  
+import jakarta.servlet.ServletException;  
+import jakarta.servlet.annotation.WebServlet;  
+import jakarta.servlet.http.HttpServlet;  
+import jakarta.servlet.http.HttpServletRequest;  
+import jakarta.servlet.http.HttpServletResponse;  
+import jakarta.servlet.http.HttpSession;  
+ 
+@WebServlet("/LoginServlet")  
+public class LoginServlet extends HttpServlet {  
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {  
+String username = request.getParameter("username");  
+String password = request.getParameter("password");  
+LoginBO loginBO = new LoginBO();  
+try {  
+if (loginBO.validate(username, password)) {  
+HttpSession session = request.getSession();  
+session.setAttribute("username", username);  
+response.sendRedirect("welcome.jsp");  
+} else {  
+throw new InvalidUserException("Invalid Username/Password");  
+}  
+} catch (InvalidUserException e) {  
+request.setAttribute("errorMessage", e.getMessage());  
+request.getRequestDispatcher("error.jsp").forward(request, response);  
+}  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+LogoffServlet.java 
+ 
+package com;  
+ 
+import java.io.IOException;  
+import jakarta.servlet.ServletException;  
+import jakarta.servlet.annotation.WebServlet;  
+import jakarta.servlet.http.HttpServlet;  
+import jakarta.servlet.http.HttpServletRequest;  
+import jakarta.servlet.http.HttpServletResponse;  
+import jakarta.servlet.http.HttpSession;  
+ 
+@WebServlet("/LogoffServlet")  
+public class LogoffServlet extends HttpServlet {  
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {  
+HttpSession session = request.getSession();  
+session.invalidate();  
+response.sendRedirect("login.jsp");  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+LoginBO.java 
+ 
+package com;  
+ 
+public class LoginBO {  
+public boolean validate(String username, String password) throws InvalidUserException {  
+LoginDAO loginDAO = new LoginDAO();  
+if (loginDAO.checkUser(username, password)) {  
+return true;  
+} else {  
+throw new InvalidUserException("Invalid Username/Password");  
+}  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+User.java 
+package com;  
+ 
+public class User {  
+private String username;  
+private String password;  
+public User(String username, String password) {  
+this.username = username;  
+this.password = password;  
+}  
+public String getUsername() {  
+return username;  
+}  
+public void setUsername(String username) {  
+this.username = username;  
+}  
+public String getPassword() {  
+return password;  
+}  
+public void setPassword(String password) {  
+this.password = password;  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+InvalidUserException 
+ 
+package com;  
+ 
+public class InvalidUserException extends Exception {  
+public InvalidUserException(String message) {  
+super(message);  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+LoginDAO.java 
+ 
+package com;  
+ 
+import java.sql.Connection;  
+import java.sql.DriverManager;  
+import java.sql.PreparedStatement;  
+import java.sql.ResultSet;  
+import java.sql.SQLException;  
+public class LoginDAO {  
+ 
+private String jdbcURL = "jdbc:mysql://localhost:3306/mphasis";  
+private String jdbcUsername = "root";  
+private String jdbcPassword = "Password@12";  
+private static final String SELECT_USER_QUERY = "SELECT * FROM login WHERE username = ? AND password = ?";  
+protected Connection getConnection() {  
+Connection connection = null;  
+try {  
+Class.forName("com.mysql.cj.jdbc.Driver");  
+connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);  
+} catch (SQLException e) {  
+e.printStackTrace();  
+} catch (ClassNotFoundException e) {  
+e.printStackTrace();  
+}  
+return connection;  
+}  
+public boolean checkUser(String username, String password) {  
+boolean isValidUser = false;  
+try (Connection connection = getConnection();  
+PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_QUERY)) {  
+preparedStatement.setString(1, username);  
+preparedStatement.setString(2, password);  
+ResultSet rs = preparedStatement.executeQuery();  
+isValidUser = rs.next();  
+} catch (SQLException e) {  
+e.printStackTrace();  
+}  
+return isValidUser;  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+Web.xml 
+ 
+<?xml version="1.0" encoding="UTF-8"?>  
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+xmlns="https://jakarta.ee/xml/ns/jakartaee"  
+xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"  
+id="WebApp_ID" version="5.0">  
+<display-name>Login Application</display-name>  
+<!-- Welcome File List -->  
+<welcome-file-list>  
+<welcome-file>login.jsp</welcome-file>  
+</welcome-file-list>  
+</web-app> 
+ 
+Day 3
+-------------------------------------------------------------------------------------------------------------
+ 
+SQL Commends 
+ 
+CREATE DATABASE userdb;  
+USE userdb;  
+CREATE TABLE users (  
+  id INT AUTO_INCREMENT PRIMARY KEY,  
+  first_name VARCHAR(50),  
+  last_name VARCHAR(50),  
+  country VARCHAR(50),  
+  languages_known TEXT,   
+  gender VARCHAR(10)  
+);  
+INSERT INTO users (first_name, last_name, country, languages_known, gender)  
+VALUES ('John', 'Doe', 'USA', 'English,Spanish', 'Male');  
+select * from users; 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+Registration.jsp 
+ 
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>  
+<!DOCTYPE html>  
+<html>  
+<head>  
+<title>Registration</title>  
+<style>  
+.error { color: red; }  
+</style>  
+</head>  
+<body>  
+<h2>User Registration</h2>  
+<form action="register" method="post">  
+First Name: <input type="text" name="firstName" required/><br/> <br> 
+Last Name: <input type="text" name="lastName" required/><br/> <br> 
+Country:  
+<select name="country" required>  
+<option value="">Select Country</option>  
+<option value="USA">USA</option>  
+<option value="Canada">Canada</option>  
+<option value="UK">UK</option>  
+<!-- Add more countries as needed -->  
+</select><br/> <br> 
+Languages Known: <br/>  
+<input type="checkbox" name="languages" value="English"/> English<br/>  
+<input type="checkbox" name="languages" value="Spanish"/> Spanish<br/>  
+<input type="checkbox" name="languages" value="French"/> French<br/>  
+<!-- Add more languages as needed -->  
+<br/>  
+Gender:  
+<input type="radio" name="gender" value="Male" required/> Male  
+<input type="radio" name="gender" value="Female" required/> Female  
+<input type="radio" name="gender" value="Other" required/> Other<br/> <br> 
+<input type="submit" value="Submit"/>  
+<input type="reset" value="Reset"/>  
+</form>  
+</body>  
+</html> 
+ 
+-------------------------------------------------------------------------------------------------------------
+SuccessPage.jsp 
+ 
+<!DOCTYPE html>  
+<html>  
+<head>  
+<title>Registration Success</title>  
+</head>  
+<body>  
+<h2>Registration Successful</h2>  
+<p>Thank you</p>  
+<a href="registration.jsp">For New User</a>  
+</body>  
+</html> 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+Error.jsp 
+ 
+<%@ page isErrorPage="true" %>  
+<!DOCTYPE html>  
+<html>  
+<head>  
+<title>Error</title>  
+<style>  
+.error { color: red; }  
+</style>  
+</head>  
+<body>  
+<h2>Error</h2>  
+<p class="error"><%= request.getAttribute("errorMessage") %></p>  
+<a href="registration.jsp">Back to Registration</a>  
+</body>  
+</html> 
+ 
+ -------------------------------------------------------------------------------------------------------------
+ 
+RegisterDAO.java 
+ 
+import java.sql.*;  
+public class RegisterDAO {  
+public void registerUser(User user) throws SQLException, ClassNotFoundException {  
+Class.forName("com.mysql.jdbc.Driver");  
+// Assume you have a DataSource for database connection  
+try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/userdb", "root", "Password@12")) {  
+String query = "INSERT INTO users (first_name, last_name, country, languages_known, gender) VALUES (?, ?, ?, ?, ?)";  
+try (PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {  
+ps.setString(1, user.getFirstName());  
+ps.setString(2, user.getLastName());  
+ps.setString(3, user.getCountry());  
+ps.setString(4, String.join(",", user.getLanguagesKnown())); // Convert list to comma-separated string  
+ps.setString(5, user.getGender());  
+ps.executeUpdate();  
+try (ResultSet rs = ps.getGeneratedKeys()) {  
+if (rs.next()) {  
+user.setRegistrationId(rs.getString(1));  
+}  
+}  
+}  
+}  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+RegistrationServlet.java 
+ 
+import java.io.IOException;  
+import java.sql.SQLException;  
+import jakarta.servlet.ServletException;  
+import jakarta.servlet.annotation.WebServlet;  
+import jakarta.servlet.http.HttpServlet;  
+import jakarta.servlet.http.HttpServletRequest;  
+import jakarta.servlet.http.HttpServletResponse;  
+ 
+@WebServlet("/register")  
+public class RegistrationServlet extends HttpServlet {  
+protected void doPost(HttpServletRequest request, HttpServletResponse response)  
+throws ServletException, IOException {  
+User user = new User();  
+user.setFirstName(request.getParameter("firstName"));  
+user.setLastName(request.getParameter("lastName"));  
+user.setCountry(request.getParameter("country"));  
+user.setLanguagesKnown(request.getParameterValues("languages"));  
+user.setGender(request.getParameter("gender"));  
+ 
+RegistrationBO registrationBO = new RegistrationBO();  
+try {  
+registrationBO.validateUser(user);  
+RegisterDAO registerDAO = new RegisterDAO();  
+try {  
+registerDAO.registerUser(user);  
+} catch (ClassNotFoundException e) {  
+// TODO Auto-generated catch block  
+e.printStackTrace();  
+}  
+ 
+request.setAttribute("user", user);  
+request.getRequestDispatcher("successPage.jsp").forward(request, response);  
+} catch (BusinessException e) {  
+request.setAttribute("errorMessage", e.getMessage());  
+request.getRequestDispatcher("error.jsp").forward(request, response);  
+} catch (SQLException e) {  
+throw new ServletException("Database error", e);  
+}  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+RegistrationBO.java 
+ 
+public class RegistrationBO {  
+public void validateUser(User user) throws BusinessException {  
+if (user.getFirstName() == null || user.getFirstName().trim().isEmpty()) {  
+throw new BusinessException("First Name is required.");  
+}  
+if (user.getLastName() == null || user.getLastName().trim().isEmpty()) {  
+throw new BusinessException("Last Name is required.");  
+}  
+if (user.getCountry() == null || user.getCountry().trim().isEmpty()) {  
+throw new BusinessException("Country is required.");  
+}  
+if (user.getLanguagesKnown() == null || user.getLanguagesKnown().length == 0) {  
+throw new BusinessException("At least one language must be selected.");  
+}  
+if (user.getGender() == null || user.getGender().trim().isEmpty()) {  
+throw new BusinessException("Gender is required.");  
+}  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+User.java 
+ 
+public class User {  
+private String firstName;  
+private String lastName;  
+private String country;  
+public String getFirstName() {  
+return firstName;  
+}  
+public void setFirstName(String firstName) {  
+this.firstName = firstName;  
+}  
+public String getLastName() {  
+return lastName;  
+}  
+public void setLastName(String lastName) {  
+this.lastName = lastName;  
+}  
+public String getCountry() {  
+return country;  
+}  
+public void setCountry(String country) {  
+this.country = country;  
+}  
+public String[] getLanguagesKnown() {  
+return languagesKnown;  
+}  
+public void setLanguagesKnown(String[] languagesKnown) {  
+this.languagesKnown = languagesKnown;  
+}  
+public String getGender() {  
+return gender;  
+}  
+public void setGender(String gender) {  
+this.gender = gender;  
+}  
+public String getRegistrationId() {  
+return registrationId;  
+}  
+public void setRegistrationId(String registrationId) {  
+this.registrationId = registrationId;  
+}  
+private String[] languagesKnown;  
+private String gender;  
+private String registrationId;  
+} 
+BusinessException.java 
+public class BusinessException extends Exception {  
+public BusinessException(String message) {  
+super(message);  
+}  
+} 
+ 
+-----------------------------------------------------------------------------------------------------------------------------
+Web.xml 
+ 
+<?xml version="1.0" encoding="UTF-8"?> 
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd" id="WebApp_ID" version="5.0"> 
+<display-name>MyFriend</display-name> 
+<welcome-file-list>  
+ 
+<welcome-file>registration.jsp</welcome-file>  
+ 
+</welcome-file-list>  
+</web-app> 
+ 
+has context menu
+ 
+has context menu
