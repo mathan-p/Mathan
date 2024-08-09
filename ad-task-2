@@ -1,0 +1,241 @@
+Day 2
+
+SQL Commands 
+use mphasis237; 
+  
+create table Login(  
+username varchar(20) not null, 
+password varchar(20) not null); 
+  
+desc login; 
+insert into Login values('Admin','admin'); 
+insert into Login values(mathan, mathan); 
+select * from Login; 
+ 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+Login.jsp 
+ 
+<!DOCTYPE html>  
+<html>  
+<head>  
+<title>Login</title>  
+</head>  
+<body>  
+<h2 align="center">Login</h2>  
+<form align="center" action="./LoginServlet" method="post">  
+Username: <input type="text" name="username"><br> <br> 
+Password: <input type="password" name="password"><br> <br> 
+<input type="submit" value="Login">  
+</form>  
+</body>  
+</html> 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+Welcome.jsp 
+ 
+<%@ page import="jakarta.servlet.http.*,jakarta.servlet.*" %>  
+<!DOCTYPE html>  
+<html>  
+<head>  
+<title>Welcome</title>  
+</head>  
+<body>  
+<h2 align="center">Welcome, <%= session.getAttribute("username") %></h2>  
+<p align="center"><a href="LogoffServlet">Logoff</a> </p> 
+</body>  
+</html> 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+Error.jsp 
+ 
+<!DOCTYPE html>  
+<html>  
+<head>  
+<title>Error</title>  
+</head>  
+<body>  
+<h2 align="center">Error: <%= request.getAttribute("errorMessage") %></h2>  
+<p align="center"><a href="login.jsp">Go to Login Page</a> </p> 
+</body>  
+</html> 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+LoginServlet.java 
+ 
+package com;  
+ 
+import java.io.IOException;  
+import jakarta.servlet.ServletException;  
+import jakarta.servlet.annotation.WebServlet;  
+import jakarta.servlet.http.HttpServlet;  
+import jakarta.servlet.http.HttpServletRequest;  
+import jakarta.servlet.http.HttpServletResponse;  
+import jakarta.servlet.http.HttpSession;  
+ 
+@WebServlet("/LoginServlet")  
+public class LoginServlet extends HttpServlet {  
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {  
+String username = request.getParameter("username");  
+String password = request.getParameter("password");  
+LoginBO loginBO = new LoginBO();  
+try {  
+if (loginBO.validate(username, password)) {  
+HttpSession session = request.getSession();  
+session.setAttribute("username", username);  
+response.sendRedirect("welcome.jsp");  
+} else {  
+throw new InvalidUserException("Invalid Username/Password");  
+}  
+} catch (InvalidUserException e) {  
+request.setAttribute("errorMessage", e.getMessage());  
+request.getRequestDispatcher("error.jsp").forward(request, response);  
+}  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+LogoffServlet.java 
+ 
+package com;  
+ 
+import java.io.IOException;  
+import jakarta.servlet.ServletException;  
+import jakarta.servlet.annotation.WebServlet;  
+import jakarta.servlet.http.HttpServlet;  
+import jakarta.servlet.http.HttpServletRequest;  
+import jakarta.servlet.http.HttpServletResponse;  
+import jakarta.servlet.http.HttpSession;  
+ 
+@WebServlet("/LogoffServlet")  
+public class LogoffServlet extends HttpServlet {  
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {  
+HttpSession session = request.getSession();  
+session.invalidate();  
+response.sendRedirect("login.jsp");  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+LoginBO.java 
+ 
+package com;  
+ 
+public class LoginBO {  
+public boolean validate(String username, String password) throws InvalidUserException {  
+LoginDAO loginDAO = new LoginDAO();  
+if (loginDAO.checkUser(username, password)) {  
+return true;  
+} else {  
+throw new InvalidUserException("Invalid Username/Password");  
+}  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+User.java 
+
+package com;  
+ 
+public class User {  
+private String username;  
+private String password;  
+public User(String username, String password) {  
+this.username = username;  
+this.password = password;  
+}  
+public String getUsername() {  
+return username;  
+}  
+public void setUsername(String username) {  
+this.username = username;  
+}  
+public String getPassword() {  
+return password;  
+}  
+public void setPassword(String password) {  
+this.password = password;  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+InvalidUserException 
+ 
+package com;  
+ 
+public class InvalidUserException extends Exception {  
+public InvalidUserException(String message) {  
+super(message);  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+LoginDAO.java 
+ 
+package com;  
+ 
+import java.sql.Connection;  
+import java.sql.DriverManager;  
+import java.sql.PreparedStatement;  
+import java.sql.ResultSet;  
+import java.sql.SQLException;  
+public class LoginDAO {  
+ 
+private String jdbcURL = "jdbc:mysql://localhost:3306/mphasis";  
+private String jdbcUsername = "root";  
+private String jdbcPassword = "Password@12";  
+private static final String SELECT_USER_QUERY = "SELECT * FROM login WHERE username = ? AND password = ?";  
+protected Connection getConnection() {  
+Connection connection = null;  
+try {  
+Class.forName("com.mysql.cj.jdbc.Driver");  
+connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);  
+} catch (SQLException e) {  
+e.printStackTrace();  
+} catch (ClassNotFoundException e) {  
+e.printStackTrace();  
+}  
+return connection;  
+}  
+public boolean checkUser(String username, String password) {  
+boolean isValidUser = false;  
+try (Connection connection = getConnection();  
+PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_QUERY)) {  
+preparedStatement.setString(1, username);  
+preparedStatement.setString(2, password);  
+ResultSet rs = preparedStatement.executeQuery();  
+isValidUser = rs.next();  
+} catch (SQLException e) {  
+e.printStackTrace();  
+}  
+return isValidUser;  
+}  
+} 
+ 
+-------------------------------------------------------------------------------------------------------------
+ 
+
+
+Web.xml 
+ 
+<?xml version="1.0" encoding="UTF-8"?>  
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+xmlns="https://jakarta.ee/xml/ns/jakartaee"  
+xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"  
+id="WebApp_ID" version="5.0">  
+<display-name>Login Application</display-name>  
+<!-- Welcome File List -->  
+<welcome-file-list>  
+<welcome-file>login.jsp</welcome-file>  
+</welcome-file-list>  
+</web-app> 
+
