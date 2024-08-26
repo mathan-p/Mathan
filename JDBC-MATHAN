@@ -1,0 +1,132 @@
+jdbc SELECT
+--------------------------------------------------------------
+package jdbc;
+import java.sql.*;
+
+//1.import 
+//2. load and register 
+//3.create  connection
+//4.create statement
+//5.execute the query 
+//6.process the result
+//7.close
+
+public class Demo {
+
+	public static void main(String []arg) throws Exception{
+
+
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection con =DriverManager.getConnection("jdbc:mysql://localhost:3306/mphasis237","root","Password@12");
+		
+		Statement st=con.createStatement();
+		ResultSet rs=st.executeQuery("select * from jdbcexample1");
+		
+		while(rs.next()) {
+			System.out.println(rs.getInt(1) +" "+rs.getString(2)+" "+rs.getString(3)+" "+rs.getInt(4));
+		}
+
+		System.out.println("values displayed");
+//		st.close();
+//		con.close();	
+	}
+}
+---------------------------------------------------------------
+JDBC-INSERT
+
+package jdbc;
+import java.sql.*;
+import java.util.*;
+
+//1.import 
+//2. load and register 
+//3.create  connection
+//4.create statement
+//5.execute the query 
+//6.process the result
+//7.close
+
+public class Demo {
+
+	public static void main(String []arg) throws Exception{
+
+
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection con =DriverManager.getConnection("jdbc:mysql://localhost:3306/mphasis237","root","Password@12");
+		Statement st=con.createStatement();
+//st.execute("create table jdbcexample(empno int,name varchar(30),address varchar(30))");
+		st.execute("insert into jdbcexample1 values(103,'sne','EROE',9443354)");
+
+		System.out.println("row inserted");
+
+		st.close();
+		con.close();	
+	}
+}
+---------------------------------------------------------------
+JDBC-UPDATE
+
+package jdbc;
+import java.sql.*;
+import java.util.*;
+
+//1.import 
+//2. load and register 
+//3.create  connection
+//4.create statement
+//5.execute the query 
+//6.process the result
+//7.close
+
+public class Demo {
+
+	public static void main(String []arg) throws Exception{
+
+
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection con =DriverManager.getConnection("jdbc:mysql://localhost:3306/mphasis237","root","Password@12");
+		Statement st=con.createStatement();
+
+		st.execute("update jdbcexample1  set address='Kolkotta' where empno=101");
+		System.out.println("Row updated");
+
+		
+
+		st.close();
+		con.close();	
+	}
+}
+---------------------------------------------------------------
+JDBC-DELETE
+
+
+package jdbc;
+import java.sql.*;
+import java.util.*;
+
+//1.import 
+//2. load and register 
+//3.create  connection
+//4.create statement
+//5.execute the query 
+//6.process the result
+//7.close
+
+public class Demo {
+
+	public static void main(String []arg) throws Exception{
+
+
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection con =DriverManager.getConnection("jdbc:mysql://localhost:3306/mphasis237","root","Password@12");
+		Statement st=con.createStatement();
+
+		st.execute("delete jdbcexample1  where empno=101");
+		System.out.println("Row deleted");
+		
+
+		st.close();
+		con.close();	
+	}
+}
+
